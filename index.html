@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>مُحوِّل ولوحة الكتابة الإيزيدية - Ezidki Transliteration</title>
+    <title>لوحة المفاتيح والمُحوِّل الإيزيدي - Ezidki Keyboard</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f4f6f9;
             margin: 0;
-            padding: 20px;
+            padding: 20px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -17,11 +21,11 @@
 
         .container {
             background-color: #ffffff;
-            padding: 25px;
+            padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             width: 100%;
-            max-width: 850px;
+            max-width: 900px;
         }
 
         h1 {
@@ -29,40 +33,40 @@
             margin-top: 0;
             margin-bottom: 5px;
             text-align: center;
+            font-size: 26px;
         }
 
         p.subtitle {
             color: #7f8c8d;
             text-align: center;
             margin-bottom: 20px;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         textarea {
             width: 100%;
-            height: 220px;
+            height: 200px;
             font-size: 26px;
             padding: 15px;
-            border: 2px solid #ced4da;
+            border: 2px solid #bdc3c7;
             border-radius: 8px;
             resize: vertical;
-            box-sizing: border-box;
             outline: none;
             direction: rtl;
             line-height: 1.6;
         }
 
         textarea:focus {
-            border-color: #f39c12;
+            border-color: #e67e22;
         }
 
         .controls {
-            margin-top: 15px;
+            margin: 15px 0;
             display: flex;
-            gap: 10px;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
+            gap: 10px;
         }
 
         .btn-group {
@@ -71,7 +75,7 @@
         }
 
         .btn {
-            background-color: #f39c12;
+            background-color: #e67e22;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -93,135 +97,211 @@
             background-color: #c0392b;
         }
 
-        .info-box {
-            margin-top: 20px;
-            padding: 12px;
-            background-color: #f1f2f6;
-            border-right: 4px solid #f39c12;
-            font-size: 14px;
-            color: #57606f;
+        /* تنسيق لوحة الحروف على الشاشة */
+        .keyboard-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #34495e;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .keyboard-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            direction: rtl;
+        }
+
+        .key-btn {
+            background-color: #ffffff;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 22px;
+            cursor: pointer;
+            user-select: none;
+            min-width: 45px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.1s ease;
+        }
+
+        .key-btn:hover {
+            background-color: #f39c12;
+            color: white;
+            border-color: #f39c12;
+        }
+
+        .key-btn:active {
+            transform: scale(0.95);
+        }
+
+        .space-btn {
+            flex-grow: 1;
+            max-width: 250px;
+            font-size: 16px;
+        }
+
+        .action-btn {
+            background-color: #95a5a6;
+            color: white;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>مُحوِّل اللغة الإيزيدية</h1>
-        <p class="subtitle">اكتب من لوحة مفاتيح جهازك (بالعربي أو الكورمانجي) وسيتحول النص فوراً إلى الحروف الإيزيدية</p>
+        <h1>لوحة المفاتيح الإيزيدية - 𐺩𐺏𐺨𐺋𐺊𐺀𐺢</h1>
+        <p class="subtitle">انقر على الحروف الظاهرة على الشاشة أو اكتب مباشرة من كيبورد جهازك لتظهر الحروف الإيزيدية</p>
 
-        <textarea id="editor" placeholder="ابدأ الكتابة من كيبورد موبايلك أو الكمبيوتر..."></textarea>
+        <!-- مربع الكتابة -->
+        <textarea id="editor" placeholder="اكتب هنا من كيبورد الهاتف/الكمبيوتر أو اضغط على الأزرار بالأسفل..."></textarea>
 
+        <!-- أزرار النسخ والمسح -->
         <div class="controls">
             <div class="btn-group">
                 <button class="btn" onclick="copyText()">نسخ النص الإيزيدي</button>
-                <button class="btn btn-clear" onclick="clearText()">مسح النص</button>
+                <button class="btn btn-clear" onclick="clearText()">مسح الكل</button>
             </div>
             <span id="charCount" style="color: #7f8c8d;">عدد الحروف: 0</span>
         </div>
 
-        <div class="info-box">
-            💡 **ملاحظة:** يمكنك تعديل ربط الحروف العربية واللاتينية بالحروف الإيزيدية المطابقة لها داخل مصفوفة `charMap` في الكود بسهولة.
+        <!-- أزرار الحروف على الشاشة -->
+        <div class="keyboard-title">الحروف الإيزيدية الرسمية:</div>
+        <div class="keyboard-grid" id="keyboardContainer">
+            <!-- يتم إنشاؤها عبر الجافاسكربت -->
         </div>
     </div>
 
     <script>
-        // جدول مطابقة الحروف (Map)
-        // أضف أو عدّل الحروف العربية أو اللاتينية وما يقابلها بالحرف الإيزيدي الصحيح
-        const charMap = {
-            // الحروف العربية -> الإيزيدية
-            'ا': '𐺀', 'أ': '𐺀', 'إ': '𐺀', 'آ': '𐺀',
-            'ب': '𐺁',
-            'پ': '𐺂',
-            'ت': '𐺃',
-            'ج': '𐺆',
-            'چ': '𐺅',
-            'ح': '𐺆',
-            'خ': '𐺇',
-            'د': '𐺈',
-            'ر': '𐺉',
-            'ز': '𐺊',
-            'ژ': '𐺋',
-            'س': '𐺌',
-            'ش': '𐺍',
-            'ع': '𐺎',
-            'غ': '𐺏',
-            'ف': '𐺐',
-            'ڤ': '𐺑',
-            'ق': '𐺒',
-            'ك': '𐺓',
-            'گ': '𐺔',
-            'ل': '𐺕',
-            'م': '𐺖',
-            'ن': '𐺗',
-            'ه': '𐺘',
-            'و': '𐺙',
-            'ي': '𐺚',
-            'ى': '𐺚',
+        // قائمة الحروف الإيزيدية للعرض على الشاشة
+        const yezidiAlphabet = [
+            '𐺀', '𐺁', '𐺂', '𐺃', '𐺄', '𐺅', '𐺆', '𐺇', '𐺈', '𐺉', 
+            '𐺊', '𐺋', '𐺌', '𐺍', '𐺎', '𐺏', '𐺐', '𐺑', '𐺒', '𐺓', 
+            '𐺔', '𐺕', '𐺖', '𐺗', '𐺘', '𐺙', '𐺚', '𐺛', '𐺜', '𐺝', 
+            '𐺞', '𐺟', '𐺠', '𐺡', '𐺢', '𐺣', '𐺤', '𐺥', '𐺦', '𐺧', 
+            '𐺨', '𐺩', '𐺫', '𐺬', '𐺭'
+        ];
 
-            // الحروف اللاتينية / الكورمانجية -> الإيزيدية
-            'a': '𐺀', 'A': '𐺀',
-            'b': '𐺁', 'B': '𐺁',
-            'p': '𐺂', 'P': '𐺂',
-            't': '𐺃', 'T': '𐺃',
-            'c': '𐺄', 'C': '𐺄',
-            'ç': '𐺅', 'Ç': '𐺅',
-            'h': '𐺆', 'H': '𐺆',
-            'x': '𐺇', 'X': '𐺇',
-            'd': '𐺈', 'D': '𐺈',
-            'r': '𐺉', 'R': '𐺉',
-            'z': '𐺊', 'Z': '𐺊',
-            'j': '𐺋', 'J': '𐺋',
-            's': '𐺌', 'S': '𐺌',
-            'ş': '𐺍', 'Ş': '𐺍',
-            'e': '𐺎', 'E': '𐺎',
-            'f': '𐺐', 'F': '𐺐',
-            'v': '𐺑', 'V': '𐺑',
-            'q': '𐺒', 'Q': '𐺒',
-            'k': '𐺓', 'K': '𐺓',
-            'g': '𐺔', 'G': '𐺔',
-            'l': '𐺕', 'L': '𐺕',
-            'm': '𐺖', 'M': '𐺖',
-            'n': '𐺗', 'N': '𐺗',
-            'w': '𐺙', 'W': '𐺙',
+        // خريطة تحويل مفاتيح الجهاز (عربي ولاتيني) إلى إيزيدي
+        const charMap = {
+            // عربي
+            'ا': '𐺀', 'أ': '𐺀', 'إ': '𐺀', 'آ': '𐺀', 'ب': '𐺁', 'پ': '𐺂',
+            'ت': '𐺃', 'ج': '𐺄', 'چ': '𐺅', 'ح': '𐺆', 'خ': '𐺇', 'د': '𐺈',
+            'ر': '𐺉', 'ز': '𐺊', 'ژ': '𐺋', 'س': '𐺌', 'ش': '𐺍', 'ع': '𐺎',
+            'غ': '𐺏', 'ف': '𐺐', 'ڤ': '𐺑', 'ق': '𐺒', 'ك': '𐺓', 'گ': '𐺔',
+            'ل': '𐺕', 'م': '𐺖', 'ن': '𐺗', 'ه': '𐺘', 'و': '𐺙', 'ي': '𐺚', 'ى': '𐺚',
+
+            // لاتيني / كرمانجي
+            'a': '𐺀', 'A': '𐺀', 'b': '𐺁', 'B': '𐺁', 'p': '𐺂', 'P': '𐺂',
+            't': '𐺃', 'T': '𐺃', 'c': '𐺄', 'C': '𐺄', 'ç': '𐺅', 'Ç': '𐺅',
+            'h': '𐺆', 'H': '𐺆', 'x': '𐺇', 'X': '𐺇', 'd': '𐺈', 'D': '𐺈',
+            'r': '𐺉', 'R': '𐺉', 'z': '𐺊', 'Z': '𐺊', 'j': '𐺋', 'J': '𐺋',
+            's': '𐺌', 'S': '𐺌', 'ş': '𐺍', 'Ş': '𐺍', 'e': '𐺎', 'E': '𐺎',
+            'f': '𐺐', 'F': '𐺐', 'v': '𐺑', 'V': '𐺑', 'q': '𐺒', 'Q': '𐺒',
+            'k': '𐺓', 'K': '𐺓', 'g': '𐺔', 'G': '𐺔', 'l': '𐺕', 'L': '𐺕',
+            'm': '𐺖', 'M': '𐺖', 'n': '𐺗', 'N': '𐺗', 'w': '𐺙', 'W': '𐺙',
             'y': '𐺚', 'Y': '𐺚'
         };
 
         const editor = document.getElementById('editor');
+        const keyboardContainer = document.getElementById('keyboardContainer');
         const charCount = document.getElementById('charCount');
 
-        // حدث الاستماع عند الكتابة بالحرية وتحويل الحروف مباشرة
-        editor.addEventListener('input', function(e) {
-            let cursorPosition = this.selectionStart;
-            let originalText = this.value;
-            let convertedText = '';
-
-            for (let i = 0; i < originalText.length; i++) {
-                let char = originalText[i];
-                // إذا كان الحرف موجوداً في جدول التحويل يتم استبداله
-                convertedText += charMap[char] || char;
-            }
-
-            this.value = convertedText;
-            
-            // الحفاظ على موقع المؤشر أثناء الكتابة
-            this.setSelectionRange(cursorPosition, cursorPosition);
-            
-            // تحديث عداد الحروف
-            charCount.innerText = `عدد الحروف: ${Array.from(convertedText).length}`;
+        // 1. إنشاء أزرار الشاشة تلقائياً
+        yezidiAlphabet.forEach(letter => {
+            const btn = document.createElement('button');
+            btn.className = 'key-btn';
+            btn.innerText = letter;
+            btn.onclick = () => insertAtCursor(letter);
+            keyboardContainer.appendChild(btn);
         });
 
-        // دالة النسخ
+        // إضافة زر المسافة إلى الشاشة
+        const spaceBtn = document.createElement('button');
+        spaceBtn.className = 'key-btn space-btn';
+        spaceBtn.innerText = 'مسافة';
+        spaceBtn.onclick = () => insertAtCursor(' ');
+        keyboardContainer.appendChild(spaceBtn);
+
+        // إضافة زر الحذف (Backspace) إلى الشاشة
+        const backspaceBtn = document.createElement('button');
+        backspaceBtn.className = 'key-btn action-btn';
+        backspaceBtn.innerText = '⌫';
+        backspaceBtn.onclick = () => deleteLastChar();
+        keyboardContainer.appendChild(backspaceBtn);
+
+        // 2. التحويل المباشر عند الكتابة من كيبورد الجهاز
+        editor.addEventListener('input', function(e) {
+            let start = this.selectionStart;
+            let text = this.value;
+            let converted = '';
+
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                converted += charMap[char] || char;
+            }
+
+            this.value = converted;
+            this.setSelectionRange(start, start);
+            updateCount();
+        });
+
+        // دالة إدراج الحرف عند النقر على زِر في الشاشة
+        function insertAtCursor(char) {
+            let start = editor.selectionStart;
+            let end = editor.selectionEnd;
+            let text = editor.value;
+
+            editor.value = text.substring(0, start) + char + text.substring(end);
+            editor.selectionStart = editor.selectionEnd = start + char.length;
+            editor.focus();
+            updateCount();
+        }
+
+        // دالة الحذف
+        function deleteLastChar() {
+            let start = editor.selectionStart;
+            let end = editor.selectionEnd;
+            let text = editor.value;
+
+            if (start === end && start > 0) {
+                let chars = Array.from(text);
+                chars.pop();
+                editor.value = chars.join('');
+            } else if (start !== end) {
+                editor.value = text.substring(0, start) + text.substring(end);
+            }
+            editor.focus();
+            updateCount();
+        }
+
+        // تحديث العداد
+        function updateCount() {
+            charCount.innerText = `عدد الحروف: ${Array.from(editor.value).length}`;
+        }
+
+        // نسخ النص
         function copyText() {
             if (!editor.value) return;
             editor.select();
             navigator.clipboard.writeText(editor.value);
-            alert("تم نسخ النص الإيزيدي إلى الحافظة!");
+            alert("تم نسخ النص الإيزيدي!");
         }
 
-        // دالة المسح
+        // مسح الكل
         function clearText() {
             editor.value = '';
-            charCount.innerText = 'عدد الحروف: 0';
+            updateCount();
             editor.focus();
         }
     </script>
