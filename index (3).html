@@ -1,0 +1,456 @@
+here<!DOCTYPE html>
+<html lang="yez" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة المفاتيح والأرقام الإيزيدية - Ezidki Keyboard</title>
+
+    <style>
+        @font-face {
+            font-family: 'NotoYezidiGlobal';
+            src: url('https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSerifYezidi/NotoSerifYezidi-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'YazidiNumFont';
+            src: url('Yazidinummer-Regular.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'NotoYezidiGlobal', 'YazidiNumFont', 'Segoe UI Historic', Tahoma, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 5px;
+            text-align: center;
+            font-size: 26px;
+            font-family: 'NotoYezidiGlobal', sans-serif !important;
+        }
+
+        p.subtitle {
+            color: #7f8c8d;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        textarea#editor {
+            width: 100%;
+            height: 200px;
+            font-size: 28px;
+            font-family: 'NotoYezidiGlobal', 'YazidiNumFont', sans-serif !important;
+            padding: 15px;
+            border: 2px solid #bdc3c7;
+            border-radius: 8px;
+            resize: vertical;
+            outline: none;
+            direction: rtl;
+            line-height: 1.6;
+        }
+
+        textarea#editor:focus {
+            border-color: #e67e22;
+        }
+
+        .controls {
+            margin: 15px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            background-color: #e67e22;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #d35400;
+        }
+
+        .btn-clear {
+            background-color: #e74c3c;
+        }
+
+        .btn-clear:hover {
+            background-color: #c0392b;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #34495e;
+            margin-top: 15px;
+            margin-bottom: 10px;
+        }
+
+        .keyboard-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: center;
+            background-color: #ecf0f1;
+            padding: 15px;
+            border-radius: 8px;
+            direction: rtl;
+            position: relative;
+        }
+
+        .key-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .key-btn {
+            background-color: #ffffff;
+            border: 1px solid #bdc3c7;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            min-width: 45px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            transition: all 0.1s ease;
+            -webkit-touch-callout: none;
+        }
+
+        .yezidi-num-key {
+            font-family: 'YazidiNumFont', sans-serif !important;
+            font-size: 26px;
+        }
+
+        .yezidi-letter-key {
+            font-family: 'NotoYezidiGlobal', sans-serif !important;
+        }
+
+        .key-btn:hover {
+            background-color: #f39c12;
+            color: white;
+            border-color: #f39c12;
+        }
+
+        .key-btn:active {
+            transform: scale(0.95);
+        }
+
+        .space-btn {
+            flex-grow: 1;
+            max-width: 250px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+        }
+
+        .action-btn {
+            background-color: #95a5a6;
+            color: white;
+            font-size: 16px;
+        }
+
+        /* نافذة الحروف الفرعية النافذة عند الضغط المطول */
+        .sub-popup {
+            position: absolute;
+            bottom: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2c3e50;
+            border-radius: 8px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+
+        .sub-popup button {
+            background-color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 22px;
+            min-width: 38px;
+            height: 40px;
+            cursor: pointer;
+            font-family: 'NotoYezidiGlobal', sans-serif !important;
+        }
+
+        .sub-popup button:hover {
+            background-color: #e67e22;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>لوحة المفاتيح الإيزيدية - 𐺩𐺏𐺨𐺋𐺊𐺀𐺢</h1>
+        <p class="subtitle">انقر على الحروف والأرقام الظاهرة، أو اضغط مطولاً لإظهار الحروف الفرعية</p>
+
+        <textarea id="editor" placeholder="اكتب هنا باللغة الإيزيدية..."></textarea>
+
+        <div class="controls">
+            <div class="btn-group">
+                <button class="btn" onclick="copyText()">نسخ النص الإيزيدي</button>
+                <button class="btn btn-clear" onclick="clearText()">مسح الكل</button>
+            </div>
+            <span id="charCount" style="color: #7f8c8d;">عدد الحروف: 0</span>
+        </div>
+
+        <div class="section-title">الأرقام الإيزيدية (خطك الخاص):</div>
+        <div class="keyboard-grid" id="numbersContainer"></div>
+
+        <div class="section-title">الحروف الإيزيدية:</div>
+        <div class="keyboard-grid" id="lettersContainer"></div>
+    </div>
+
+    <script>
+        const customNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        const yezidiAlphabet = [
+            '𐺀', '𐺁', '𐺂', '𐺃', '𐺄', '𐺅', '𐺆', '𐺇', '𐺈', '𐺉', 
+            '𐺊', '𐺋', '𐺌', '𐺍', '𐺎', '𐺏', '𐺐', '𐺑', '𐺒', '𐺓', 
+            '𐺔', '𐺕', '𐺖', '𐺗', '𐺘', '𐺙', '𐺚', '𐺛', '𐺜', '𐺝', 
+            '𐺞', '𐺟', '𐺠', '𐺡', '𐺢', '𐺣', '𐺤', '𐺥', '𐺦', '𐺧', 
+            '𐺨', '𐺩', '𐺫', '𐺬', '𐺭'
+        ];
+
+        // مصفوفة الحروف الفرعية الناشئة عند الضغط المطول
+        const subLetterMap = {
+            '𐺀': ['𐺁', '𐺂'],
+            '𐺆': ['𐺇'],
+            '𐺈': ['𐺉', '𐺊', '𐺋'],
+            '𐺌': ['𐺍'],
+            '𐺎': ['𐺏'],
+            '𐺐': ['𐺑'],
+            '𐺒': ['𐺓', '𐺔'],
+            '𐺙': ['𐺚']
+        };
+
+        const charMap = {
+            '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
+            '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9',
+            'ا': '𐺀', 'أ': '𐺀', 'إ': '𐺀', 'آ': '𐺀', 'ب': '𐺁', 'پ': '𐺂',
+            'ت': '𐺃', 'ج': '𐺄', 'چ': '𐺅', 'ح': '𐺆', 'خ': '𐺇', 'د': '𐺈',
+            'ر': '𐺉', 'ز': '𐺊', 'ژ': '𐺋', 'س': '𐺌', 'ش': '𐺍', 'ع': '𐺎',
+            'غ': '𐺏', 'ف': '𐺐', 'ڤ': '𐺑', 'ق': '𐺒', 'ك': '𐺓', 'گ': '𐺔',
+            'ل': '𐺕', 'م': '𐺖', 'ن': '𐺗', 'ه': '𐺘', 'و': '𐺙', 'ي': '𐺚', 'ى': '𐺚',
+            'a': '𐺀', 'A': '𐺀', 'b': '𐺁', 'B': '𐺁', 'p': '𐺂', 'P': '𐺂',
+            't': '𐺃', 'T': '𐺃', 'c': '𐺄', 'C': '𐺄', 'ç': '𐺅', 'Ç': '𐺅',
+            'h': '𐺆', 'H': '𐺆', 'x': '𐺇', 'X': '𐺇', 'd': '𐺈', 'D': '𐺈',
+            'r': '𐺉', 'R': '𐺉', 'z': '𐺊', 'Z': '𐺊', 'j': '𐺋', 'J': '𐺋',
+            's': '𐺌', 'S': '𐺌', 'ş': '𐺍', 'Ş': '𐺍', 'e': '𐺎', 'E': '𐺎',
+            'f': '𐺐', 'F': '𐺐', 'v': '𐺑', 'V': '𐺑', 'q': '𐺒', 'Q': '𐺒',
+            'k': '𐺓', 'K': '𐺓', 'g': '𐺔', 'G': '𐺔', 'l': '𐺕', 'L': '𐺕',
+            'm': '𐺖', 'M': '𐺖', 'n': '𐺗', 'N': '𐺗', 'w': '𐺙', 'W': '𐺙',
+            'y': '𐺚', 'Y': '𐺚', 'u': '𐺩', 'U': '𐺩', 'i': '𐺨', 'I': '𐺨',
+            'o': '𐺥', 'O': '𐺥', 'ä': '𐺀', 'Ä': '𐺀', 'ö': '𐺥', 'Ö': '𐺥',
+            'ü': '𐺩', 'Ü': '𐺩', 'ß': '𐺌', 'ê': '𐺠', 'Ê': '𐺠', 'î': '𐺨',
+            'Î': '𐺨', 'û': '𐺩', 'Û': '𐺩'
+        };
+
+        const editor = document.getElementById('editor');
+        const lettersContainer = document.getElementById('lettersContainer');
+        const numbersContainer = document.getElementById('numbersContainer');
+        const charCount = document.getElementById('charCount');
+
+        let activePopup = null;
+
+        customNumbers.forEach(num => {
+            const btn = document.createElement('button');
+            btn.className = 'key-btn yezidi-num-key';
+            btn.innerText = num;
+            btn.onclick = () => insertAtCursor(num);
+            numbersContainer.appendChild(btn);
+        });
+
+        yezidiAlphabet.forEach(letter => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'key-wrapper';
+
+            const btn = document.createElement('button');
+            btn.className = 'key-btn yezidi-letter-key';
+            btn.innerText = letter;
+
+            let pressTimer = null;
+            let isLongPress = false;
+
+            const startPress = (e) => {
+                isLongPress = false;
+                pressTimer = setTimeout(() => {
+                    isLongPress = true;
+                    if (subLetterMap[letter]) {
+                        showSubPopup(wrapper, subLetterMap[letter]);
+                    }
+                }, 450);
+            };
+
+            const endPress = (e) => {
+                clearTimeout(pressTimer);
+                if (!isLongPress) {
+                    insertAtCursor(letter);
+                    closePopup();
+                }
+            };
+
+            btn.addEventListener('mousedown', startPress);
+            btn.addEventListener('mouseup', endPress);
+            btn.addEventListener('touchstart', (e) => { startPress(e); });
+            btn.addEventListener('touchend', (e) => { endPress(e); e.preventDefault(); });
+
+            wrapper.appendChild(btn);
+            lettersContainer.appendChild(wrapper);
+        });
+
+        const spaceWrapper = document.createElement('div');
+        spaceWrapper.className = 'key-wrapper space-btn';
+        const spaceBtn = document.createElement('button');
+        spaceBtn.className = 'key-btn space-btn';
+        spaceBtn.innerText = 'مسافة';
+        spaceBtn.onclick = () => insertAtCursor(' ');
+        spaceWrapper.appendChild(spaceBtn);
+        lettersContainer.appendChild(spaceWrapper);
+
+        const backspaceWrapper = document.createElement('div');
+        backspaceWrapper.className = 'key-wrapper';
+        const backspaceBtn = document.createElement('button');
+        backspaceBtn.className = 'key-btn action-btn';
+        backspaceBtn.innerText = '⌫';
+        backspaceBtn.onclick = () => deleteLastChar();
+        backspaceWrapper.appendChild(backspaceBtn);
+        lettersContainer.appendChild(backspaceWrapper);
+
+        function showSubPopup(wrapper, subLetters) {
+            closePopup();
+
+            const popup = document.createElement('div');
+            popup.className = 'sub-popup';
+
+            subLetters.forEach(sub => {
+                const subBtn = document.createElement('button');
+                subBtn.innerText = sub;
+                subBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    insertAtCursor(sub);
+                    closePopup();
+                };
+                popup.appendChild(subBtn);
+            });
+
+            wrapper.appendChild(popup);
+            activePopup = popup;
+        }
+
+        function closePopup() {
+            if (activePopup) {
+                activePopup.remove();
+                activePopup = null;
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.key-wrapper')) {
+                closePopup();
+            }
+        });
+
+        editor.addEventListener('input', function() {
+            let start = this.selectionStart;
+            let text = this.value;
+            let converted = '';
+
+            for (let char of text) {
+                converted += charMap[char] || char;
+            }
+
+            this.value = converted;
+            this.setSelectionRange(start, start);
+            updateCount();
+        });
+
+        function insertAtCursor(char) {
+            let start = editor.selectionStart;
+            let end = editor.selectionEnd;
+            let text = editor.value;
+
+            editor.value = text.substring(0, start) + char + text.substring(end);
+            editor.selectionStart = editor.selectionEnd = start + char.length;
+            editor.focus();
+            updateCount();
+        }
+
+        function deleteLastChar() {
+            let start = editor.selectionStart;
+            let end = editor.selectionEnd;
+            let text = editor.value;
+
+            if (start === end && start > 0) {
+                let chars = Array.from(text);
+                chars.pop();
+                editor.value = chars.join('');
+            } else if (start !== end) {
+                editor.value = text.substring(0, start) + text.substring(end);
+            }
+            editor.focus();
+            updateCount();
+        }
+
+        function updateCount() {
+            charCount.innerText = `عدد الحروف: ${Array.from(editor.value).length}`;
+        }
+
+        function copyText() {
+            if (!editor.value) return;
+            editor.select();
+            navigator.clipboard.writeText(editor.value);
+            alert("تم نسخ النص!");
+        }
+
+        function clearText() {
+            editor.value = '';
+            updateCount();
+            editor.focus();
+        }
+    </script>
+</body>
+</html>
