@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة المفاتيح والأرقام الإيزيدية - Ezidki Keyboard</title>
+
+    <!-- استدعاء خط الحروف الإيزيدية عبر مكتبة Google Fonts المباشرة -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Yezidi:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         /* 1. استدعاء ملف الأرقام الخاص بك المرفوع على GitHub */
         @font-face {
@@ -13,20 +19,12 @@
             font-style: normal;
         }
 
-        /* 2. خط الحروف الإيزيدية المحلي المرفوع على GitHub */
-        @font-face {
-            font-family: 'LocalYezidiFont';
-            src: url('NotoSerifYezidi-Regular.ttf') format('truetype');
-            font-weight: normal;
-            font-style: normal;
-        }
-
         * {
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'LocalYezidiFont', 'YazidiNumFont', 'Segoe UI Historic', 'Ebrima', Tahoma, sans-serif;
+            font-family: 'Noto Serif Yezidi', 'YazidiNumFont', 'Segoe UI Historic', Tahoma, sans-serif;
             background-color: #f4f6f9;
             margin: 0;
             padding: 20px 10px;
@@ -50,7 +48,7 @@
             margin-bottom: 5px;
             text-align: center;
             font-size: 26px;
-            font-family: 'LocalYezidiFont', sans-serif;
+            font-family: 'Noto Serif Yezidi', sans-serif;
         }
 
         p.subtitle {
@@ -64,7 +62,7 @@
             width: 100%;
             height: 200px;
             font-size: 28px;
-            font-family: 'LocalYezidiFont', 'YazidiNumFont', sans-serif;
+            font-family: 'Noto Serif Yezidi', 'YazidiNumFont', sans-serif;
             padding: 15px;
             border: 2px solid #bdc3c7;
             border-radius: 8px;
@@ -157,7 +155,7 @@
         }
 
         .yezidi-letter-key {
-            font-family: 'LocalYezidiFont', 'Segoe UI Historic', sans-serif !important;
+            font-family: 'Noto Serif Yezidi', 'Segoe UI Historic', sans-serif !important;
         }
 
         .key-btn:hover {
