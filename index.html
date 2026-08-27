@@ -1,20 +1,18 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="yez" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة المفاتيح والأرقام إيزيدية - Ezidi Keyboard</title>
+    <title>لوحة المفاتيح والأرقام الإيزيدية - Ezidki Keyboard</title>
 
     <style>
-        /* 1. استدعاء خط الحروف الإيزيدية الشامل عبر CDN موثوق */
         @font-face {
-            font-family: 'YezidiGlobalFont';
+            font-family: 'NotoYezidiGlobal';
             src: url('https://cdn.jsdelivr.net/gh/googlefonts/noto-fonts@main/hinted/ttf/NotoSerifYezidi/NotoSerifYezidi-Regular.ttf') format('truetype');
             font-weight: normal;
             font-style: normal;
         }
 
-        /* 2. استدعاء ملف الأرقام الخاص بك المرفوع على GitHub */
         @font-face {
             font-family: 'YazidiNumFont';
             src: url('Yazidinummer-Regular.ttf') format('truetype');
@@ -27,7 +25,7 @@
         }
 
         body {
-            font-family: 'YezidiGlobalFont', 'YazidiNumFont', 'Segoe UI Historic', Tahoma, sans-serif;
+            font-family: 'NotoYezidiGlobal', 'YazidiNumFont', 'Segoe UI Historic', Tahoma, sans-serif;
             background-color: #f4f6f9;
             margin: 0;
             padding: 20px 10px;
@@ -51,7 +49,7 @@
             margin-bottom: 5px;
             text-align: center;
             font-size: 26px;
-            font-family: 'YezidiGlobalFont', sans-serif !important;
+            font-family: 'NotoYezidiGlobal', sans-serif !important;
         }
 
         p.subtitle {
@@ -65,7 +63,7 @@
             width: 100%;
             height: 200px;
             font-size: 28px;
-            font-family: 'YezidiGlobalFont', 'YazidiNumFont', sans-serif !important;
+            font-family: 'NotoYezidiGlobal', 'YazidiNumFont', sans-serif !important;
             padding: 15px;
             border: 2px solid #bdc3c7;
             border-radius: 8px;
@@ -133,6 +131,12 @@
             padding: 15px;
             border-radius: 8px;
             direction: rtl;
+            position: relative;
+        }
+
+        .key-wrapper {
+            position: relative;
+            display: inline-block;
         }
 
         .key-btn {
@@ -150,6 +154,7 @@
             justify-content: center;
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             transition: all 0.1s ease;
+            -webkit-touch-callout: none;
         }
 
         .yezidi-num-key {
@@ -158,7 +163,7 @@
         }
 
         .yezidi-letter-key {
-            font-family: 'YezidiGlobalFont', sans-serif !important;
+            font-family: 'NotoYezidiGlobal', sans-serif !important;
         }
 
         .key-btn:hover {
@@ -183,13 +188,44 @@
             color: white;
             font-size: 16px;
         }
+
+        /* نافذة الحروف الفرعية النافذة عند الضغط المطول */
+        .sub-popup {
+            position: absolute;
+            bottom: 55px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #2c3e50;
+            border-radius: 8px;
+            padding: 5px;
+            display: flex;
+            gap: 5px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+
+        .sub-popup button {
+            background-color: #ffffff;
+            border: none;
+            border-radius: 4px;
+            font-size: 22px;
+            min-width: 38px;
+            height: 40px;
+            cursor: pointer;
+            font-family: 'NotoYezidiGlobal', sans-serif !important;
+        }
+
+        .sub-popup button:hover {
+            background-color: #e67e22;
+            color: white;
+        }
     </style>
 </head>
 <body>
 
     <div class="container">
         <h1>لوحة المفاتيح الإيزيدية - 𐺩𐺏𐺨𐺋𐺊𐺀𐺢</h1>
-        <p class="subtitle">انقر على الحروف والأرقام الظاهرة أو اكتب مباشرة من الكيبورد</p>
+        <p class="subtitle">انقر على الحروف والأرقام الظاهرة، أو اضغط مطولاً لإظهار الحروف الفرعية</p>
 
         <textarea id="editor" placeholder="اكتب هنا باللغة الإيزيدية..."></textarea>
 
@@ -201,7 +237,7 @@
             <span id="charCount" style="color: #7f8c8d;">عدد الحروف: 0</span>
         </div>
 
-        <div class="section-title">الأرقام الإيزيدية:</div>
+        <div class="section-title">الأرقام الإيزيدية (خطك الخاص):</div>
         <div class="keyboard-grid" id="numbersContainer"></div>
 
         <div class="section-title">الحروف الإيزيدية:</div>
@@ -219,46 +255,46 @@
             '𐺨', '𐺩', '𐺫', '𐺬', '𐺭'
         ];
 
-        // خريطة تحويل شاملة للأحرف العربية، اللاتينية، الألمانية، الهولندية، وحروف الكرمانجي
+        // مصفوفة الحروف الفرعية الناشئة عند الضغط المطول
+        const subLetterMap = {
+            '𐺀': ['𐺁', '𐺂'],
+            '𐺆': ['𐺇'],
+            '𐺈': ['𐺉', '𐺊', '𐺋'],
+            '𐺌': ['𐺍'],
+            '𐺎': ['𐺏'],
+            '𐺐': ['𐺑'],
+            '𐺒': ['𐺓', '𐺔'],
+            '𐺙': ['𐺚']
+        };
+
         const charMap = {
-            // الأرقام
             '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
             '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9',
-
-            // الأحرف العربية
             'ا': '𐺀', 'أ': '𐺀', 'إ': '𐺀', 'آ': '𐺀', 'ب': '𐺁', 'پ': '𐺂',
             'ت': '𐺃', 'ج': '𐺄', 'چ': '𐺅', 'ح': '𐺆', 'خ': '𐺇', 'د': '𐺈',
             'ر': '𐺉', 'ز': '𐺊', 'ژ': '𐺋', 'س': '𐺌', 'ش': '𐺍', 'ع': '𐺎',
             'غ': '𐺏', 'ف': '𐺐', 'ڤ': '𐺑', 'ق': '𐺒', 'ك': '𐺓', 'گ': '𐺔',
             'ل': '𐺕', 'م': '𐺖', 'ن': '𐺗', 'ه': '𐺘', 'و': '𐺙', 'ي': '𐺚', 'ى': '𐺚',
-
-            // الأحرف اللاتينية الأساسية (الإنجليزية وغيرها)
             'a': '𐺀', 'A': '𐺀', 'b': '𐺁', 'B': '𐺁', 'p': '𐺂', 'P': '𐺂',
-            't': '𐺃', 'T': '𐺃', 'c': '𐺄', 'C': '𐺄', 'h': '𐺆', 'H': '𐺆',
-            'x': '𐺇', 'X': '𐺇', 'd': '𐺈', 'D': '𐺈', 'r': '𐺉', 'R': '𐺉',
-            'z': '𐺊', 'Z': '𐺊', 'j': '𐺋', 'J': '𐺋', 's': '𐺌', 'S': '𐺌',
-            'e': '𐺎', 'E': '𐺎', 'f': '𐺐', 'F': '𐺐', 'v': '𐺑', 'V': '𐺑',
-            'q': '𐺒', 'Q': '𐺒', 'k': '𐺓', 'K': '𐺓', 'g': '𐺔', 'G': '𐺔',
-            'l': '𐺕', 'L': '𐺕', 'm': '𐺖', 'M': '𐺖', 'n': '𐺗', 'N': '𐺗',
-            'w': '𐺙', 'W': '𐺙', 'y': '𐺚', 'Y': '𐺚', 'u': '𐺩', 'U': '𐺩',
-            'i': '𐺨', 'I': '𐺨', 'o': '𐺥', 'O': '𐺥',
-
-            // أحرف الكرمانجي الخاصة
-            'ç': '𐺅', 'Ç': '𐺅', 'ş': '𐺍', 'Ş': '𐺍', 'ê': '𐺠', 'Ê': '𐺠',
-            'î': '𐺨', 'Î': '𐺨', 'û': '𐺩', 'Û': '𐺩',
-
-            // الأحرف الخاصة باللغة الألمانية (German)
-            'ä': '𐺀', 'Ä': '𐺀', 'ö': '𐺥', 'Ö': '𐺥', 'ü': '𐺩', 'Ü': '𐺩', 'ß': '𐺌',
-
-            // الأحرف الخاصة باللغة الهولندية (Dutch)
-            'é': '𐺠', 'É': '𐺠', 'è': '𐺎', 'È': '𐺎', 'ë': '𐺎', 'Ë': '𐺎',
-            'ï': '𐺨', 'Ï': '𐺨', 'ij': '𐺚', 'IJ': '𐺚'
+            't': '𐺃', 'T': '𐺃', 'c': '𐺄', 'C': '𐺄', 'ç': '𐺅', 'Ç': '𐺅',
+            'h': '𐺆', 'H': '𐺆', 'x': '𐺇', 'X': '𐺇', 'd': '𐺈', 'D': '𐺈',
+            'r': '𐺉', 'R': '𐺉', 'z': '𐺊', 'Z': '𐺊', 'j': '𐺋', 'J': '𐺋',
+            's': '𐺌', 'S': '𐺌', 'ş': '𐺍', 'Ş': '𐺍', 'e': '𐺎', 'E': '𐺎',
+            'f': '𐺐', 'F': '𐺐', 'v': '𐺑', 'V': '𐺑', 'q': '𐺒', 'Q': '𐺒',
+            'k': '𐺓', 'K': '𐺓', 'g': '𐺔', 'G': '𐺔', 'l': '𐺕', 'L': '𐺕',
+            'm': '𐺖', 'M': '𐺖', 'n': '𐺗', 'N': '𐺗', 'w': '𐺙', 'W': '𐺙',
+            'y': '𐺚', 'Y': '𐺚', 'u': '𐺩', 'U': '𐺩', 'i': '𐺨', 'I': '𐺨',
+            'o': '𐺥', 'O': '𐺥', 'ä': '𐺀', 'Ä': '𐺀', 'ö': '𐺥', 'Ö': '𐺥',
+            'ü': '𐺩', 'Ü': '𐺩', 'ß': '𐺌', 'ê': '𐺠', 'Ê': '𐺠', 'î': '𐺨',
+            'Î': '𐺨', 'û': '𐺩', 'Û': '𐺩'
         };
 
         const editor = document.getElementById('editor');
         const lettersContainer = document.getElementById('lettersContainer');
         const numbersContainer = document.getElementById('numbersContainer');
         const charCount = document.getElementById('charCount');
+
+        let activePopup = null;
 
         customNumbers.forEach(num => {
             const btn = document.createElement('button');
@@ -269,24 +305,94 @@
         });
 
         yezidiAlphabet.forEach(letter => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'key-wrapper';
+
             const btn = document.createElement('button');
             btn.className = 'key-btn yezidi-letter-key';
             btn.innerText = letter;
-            btn.onclick = () => insertAtCursor(letter);
-            lettersContainer.appendChild(btn);
+
+            let pressTimer = null;
+            let isLongPress = false;
+
+            const startPress = (e) => {
+                isLongPress = false;
+                pressTimer = setTimeout(() => {
+                    isLongPress = true;
+                    if (subLetterMap[letter]) {
+                        showSubPopup(wrapper, subLetterMap[letter]);
+                    }
+                }, 450);
+            };
+
+            const endPress = (e) => {
+                clearTimeout(pressTimer);
+                if (!isLongPress) {
+                    insertAtCursor(letter);
+                    closePopup();
+                }
+            };
+
+            btn.addEventListener('mousedown', startPress);
+            btn.addEventListener('mouseup', endPress);
+            btn.addEventListener('touchstart', (e) => { startPress(e); });
+            btn.addEventListener('touchend', (e) => { endPress(e); e.preventDefault(); });
+
+            wrapper.appendChild(btn);
+            lettersContainer.appendChild(wrapper);
         });
 
+        const spaceWrapper = document.createElement('div');
+        spaceWrapper.className = 'key-wrapper space-btn';
         const spaceBtn = document.createElement('button');
         spaceBtn.className = 'key-btn space-btn';
         spaceBtn.innerText = 'مسافة';
         spaceBtn.onclick = () => insertAtCursor(' ');
-        lettersContainer.appendChild(spaceBtn);
+        spaceWrapper.appendChild(spaceBtn);
+        lettersContainer.appendChild(spaceWrapper);
 
+        const backspaceWrapper = document.createElement('div');
+        backspaceWrapper.className = 'key-wrapper';
         const backspaceBtn = document.createElement('button');
         backspaceBtn.className = 'key-btn action-btn';
         backspaceBtn.innerText = '⌫';
         backspaceBtn.onclick = () => deleteLastChar();
-        lettersContainer.appendChild(backspaceBtn);
+        backspaceWrapper.appendChild(backspaceBtn);
+        lettersContainer.appendChild(backspaceWrapper);
+
+        function showSubPopup(wrapper, subLetters) {
+            closePopup();
+
+            const popup = document.createElement('div');
+            popup.className = 'sub-popup';
+
+            subLetters.forEach(sub => {
+                const subBtn = document.createElement('button');
+                subBtn.innerText = sub;
+                subBtn.onclick = (e) => {
+                    e.stopPropagation();
+                    insertAtCursor(sub);
+                    closePopup();
+                };
+                popup.appendChild(subBtn);
+            });
+
+            wrapper.appendChild(popup);
+            activePopup = popup;
+        }
+
+        function closePopup() {
+            if (activePopup) {
+                activePopup.remove();
+                activePopup = null;
+            }
+        }
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.key-wrapper')) {
+                closePopup();
+            }
+        });
 
         editor.addEventListener('input', function() {
             let start = this.selectionStart;
