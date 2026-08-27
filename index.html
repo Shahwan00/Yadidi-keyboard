@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة المفاتيح والمُحوِّل الإيزيدي - Ezidki Keyboard</title>
+    <title>لوحة المفاتيح والأرقام الإيزيدية - Ezidki Keyboard</title>
     <style>
+        /* استدعاء خط الحروف والأرقام الإيزيدية من غوغل لحل مشكلة المربعات */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+Yezidi:wght@400;700&display=swap');
+
         * {
             box-sizing: border-box;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Noto Serif Yezidi', Segoe UI, Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f4f6f9;
             margin: 0;
             padding: 20px 10px;
@@ -21,7 +24,7 @@
 
         .container {
             background-color: #ffffff;
-            padding: 20px;
+            padding: 25px;
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.08);
             width: 100%;
@@ -34,6 +37,7 @@
             margin-bottom: 5px;
             text-align: center;
             font-size: 26px;
+            font-family: 'Noto Serif Yezidi', Arial, sans-serif;
         }
 
         p.subtitle {
@@ -46,7 +50,8 @@
         textarea {
             width: 100%;
             height: 200px;
-            font-size: 26px;
+            font-size: 28px;
+            font-family: 'Noto Serif Yezidi', Arial, sans-serif;
             padding: 15px;
             border: 2px solid #bdc3c7;
             border-radius: 8px;
@@ -97,12 +102,11 @@
             background-color: #c0392b;
         }
 
-        /* تنسيق لوحة الحروف على الشاشة */
-        .keyboard-title {
+        .section-title {
             font-size: 16px;
             font-weight: bold;
             color: #34495e;
-            margin-top: 10px;
+            margin-top: 15px;
             margin-bottom: 10px;
         }
 
@@ -121,8 +125,9 @@
             background-color: #ffffff;
             border: 1px solid #bdc3c7;
             border-radius: 6px;
-            padding: 10px;
-            font-size: 22px;
+            padding: 8px;
+            font-size: 24px;
+            font-family: 'Noto Serif Yezidi', Arial, sans-serif;
             cursor: pointer;
             user-select: none;
             min-width: 45px;
@@ -148,6 +153,7 @@
             flex-grow: 1;
             max-width: 250px;
             font-size: 16px;
+            font-family: Arial, sans-serif;
         }
 
         .action-btn {
@@ -161,12 +167,12 @@
 
     <div class="container">
         <h1>لوحة المفاتيح الإيزيدية - 𐺩𐺏𐺨𐺋𐺊𐺀𐺢</h1>
-        <p class="subtitle">انقر على الحروف الظاهرة على الشاشة أو اكتب مباشرة من كيبورد جهازك لتظهر الحروف الإيزيدية</p>
+        <p class="subtitle">انقر على الحروف والأرقام الظاهرة أو اكتب مباشرة من الكيبورد</p>
 
         <!-- مربع الكتابة -->
-        <textarea id="editor" placeholder="اكتب هنا من كيبورد الهاتف/الكمبيوتر أو اضغط على الأزرار بالأسفل..."></textarea>
+        <textarea id="editor" placeholder="اكتب هنا باللغة الإيزيدية..."></textarea>
 
-        <!-- أزرار النسخ والمسح -->
+        <!-- الأزرار -->
         <div class="controls">
             <div class="btn-group">
                 <button class="btn" onclick="copyText()">نسخ النص الإيزيدي</button>
@@ -175,15 +181,20 @@
             <span id="charCount" style="color: #7f8c8d;">عدد الحروف: 0</span>
         </div>
 
-        <!-- أزرار الحروف على الشاشة -->
-        <div class="keyboard-title">الحروف الإيزيدية الرسمية:</div>
-        <div class="keyboard-grid" id="keyboardContainer">
-            <!-- يتم إنشاؤها عبر الجافاسكربت -->
-        </div>
+        <!-- قسم الأرقام الإيزيدية -->
+        <div class="section-title">الأرقام الإيزيدية:</div>
+        <div class="keyboard-grid" id="numbersContainer"></div>
+
+        <!-- قسم الحروف الإيزيدية -->
+        <div class="section-title">الحروف الإيزيدية:</div>
+        <div class="keyboard-grid" id="lettersContainer"></div>
     </div>
 
     <script>
-        // قائمة الحروف الإيزيدية للعرض على الشاشة
+        // الأرقام الإيزيدية (من 0 إلى 9)
+        const yezidiNumbers = ['𐺰', '𐺱', '𐺲', '𐺳', '𐺴', '𐺵', '𐺶', '𐺷', '𐺸', '𐺹'];
+
+        // الحروف الإيزيدية
         const yezidiAlphabet = [
             '𐺀', '𐺁', '𐺂', '𐺃', '𐺄', '𐺅', '𐺆', '𐺇', '𐺈', '𐺉', 
             '𐺊', '𐺋', '𐺌', '𐺍', '𐺎', '𐺏', '𐺐', '𐺑', '𐺒', '𐺓', 
@@ -192,16 +203,22 @@
             '𐺨', '𐺩', '𐺫', '𐺬', '𐺭'
         ];
 
-        // خريطة تحويل مفاتيح الجهاز (عربي ولاتيني) إلى إيزيدي
+        // مطابقة الكيبورد (عربي/لاتيني/أرقام) -> إيزيدي
         const charMap = {
-            // عربي
+            // الأرقام
+            '0': '𐺰', '1': '𐺱', '2': '𐺲', '3': '𐺳', '4': '𐺴',
+            '5': '𐺵', '6': '𐺶', '7': '𐺷', '8': '𐺸', '9': '𐺹',
+            '٠': '𐺰', '١': '𐺱', '٢': '𐺲', '٣': '𐺳', '٤': '𐺴',
+            '٥': '𐺵', '٦': '𐺶', '٧': '𐺷', '٨': '𐺸', '٩': '𐺹',
+
+            // حروف عربية
             'ا': '𐺀', 'أ': '𐺀', 'إ': '𐺀', 'آ': '𐺀', 'ب': '𐺁', 'پ': '𐺂',
             'ت': '𐺃', 'ج': '𐺄', 'چ': '𐺅', 'ح': '𐺆', 'خ': '𐺇', 'د': '𐺈',
             'ر': '𐺉', 'ز': '𐺊', 'ژ': '𐺋', 'س': '𐺌', 'ش': '𐺍', 'ع': '𐺎',
             'غ': '𐺏', 'ف': '𐺐', 'ڤ': '𐺑', 'ق': '𐺒', 'ك': '𐺓', 'گ': '𐺔',
             'ل': '𐺕', 'م': '𐺖', 'ن': '𐺗', 'ه': '𐺘', 'و': '𐺙', 'ي': '𐺚', 'ى': '𐺚',
 
-            // لاتيني / كرمانجي
+            // حروف لاتينية / كرمانجية
             'a': '𐺀', 'A': '𐺀', 'b': '𐺁', 'B': '𐺁', 'p': '𐺂', 'P': '𐺂',
             't': '𐺃', 'T': '𐺃', 'c': '𐺄', 'C': '𐺄', 'ç': '𐺅', 'Ç': '𐺅',
             'h': '𐺆', 'H': '𐺆', 'x': '𐺇', 'X': '𐺇', 'd': '𐺈', 'D': '𐺈',
@@ -214,34 +231,43 @@
         };
 
         const editor = document.getElementById('editor');
-        const keyboardContainer = document.getElementById('keyboardContainer');
+        const lettersContainer = document.getElementById('lettersContainer');
+        const numbersContainer = document.getElementById('numbersContainer');
         const charCount = document.getElementById('charCount');
 
-        // 1. إنشاء أزرار الشاشة تلقائياً
+        // بناء لوحة الأرقام
+        yezidiNumbers.forEach(num => {
+            const btn = document.createElement('button');
+            btn.className = 'key-btn';
+            btn.innerText = num;
+            btn.onclick = () => insertAtCursor(num);
+            numbersContainer.appendChild(btn);
+        });
+
+        // بناء لوحة الحروف
         yezidiAlphabet.forEach(letter => {
             const btn = document.createElement('button');
             btn.className = 'key-btn';
             btn.innerText = letter;
             btn.onclick = () => insertAtCursor(letter);
-            keyboardContainer.appendChild(btn);
+            lettersContainer.appendChild(btn);
         });
 
-        // إضافة زر المسافة إلى الشاشة
+        // زر المسافة والتراجع
         const spaceBtn = document.createElement('button');
         spaceBtn.className = 'key-btn space-btn';
         spaceBtn.innerText = 'مسافة';
         spaceBtn.onclick = () => insertAtCursor(' ');
-        keyboardContainer.appendChild(spaceBtn);
+        lettersContainer.appendChild(spaceBtn);
 
-        // إضافة زر الحذف (Backspace) إلى الشاشة
         const backspaceBtn = document.createElement('button');
         backspaceBtn.className = 'key-btn action-btn';
         backspaceBtn.innerText = '⌫';
         backspaceBtn.onclick = () => deleteLastChar();
-        keyboardContainer.appendChild(backspaceBtn);
+        lettersContainer.appendChild(backspaceBtn);
 
-        // 2. التحويل المباشر عند الكتابة من كيبورد الجهاز
-        editor.addEventListener('input', function(e) {
+        // التحويل المباشر عند الكتابة من الكيبورد
+        editor.addEventListener('input', function() {
             let start = this.selectionStart;
             let text = this.value;
             let converted = '';
@@ -256,7 +282,6 @@
             updateCount();
         });
 
-        // دالة إدراج الحرف عند النقر على زِر في الشاشة
         function insertAtCursor(char) {
             let start = editor.selectionStart;
             let end = editor.selectionEnd;
@@ -268,7 +293,6 @@
             updateCount();
         }
 
-        // دالة الحذف
         function deleteLastChar() {
             let start = editor.selectionStart;
             let end = editor.selectionEnd;
@@ -285,26 +309,22 @@
             updateCount();
         }
 
-        // تحديث العداد
         function updateCount() {
             charCount.innerText = `عدد الحروف: ${Array.from(editor.value).length}`;
         }
 
-        // نسخ النص
         function copyText() {
             if (!editor.value) return;
             editor.select();
             navigator.clipboard.writeText(editor.value);
-            alert("تم نسخ النص الإيزيدي!");
+            alert("تم نسخ النص!");
         }
 
-        // مسح الكل
         function clearText() {
             editor.value = '';
             updateCount();
             editor.focus();
         }
     </script>
-
 </body>
 </html>
