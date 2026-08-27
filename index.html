@@ -5,16 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>لوحة المفاتيح والأرقام الإيزيدية - Ezidki Keyboard</title>
 
-    <style>
-        /* 1. استدعاء خط الحروف الإيزيدية الرسمي مباشرة كـ WebFont */
-        @font-face {
-            font-family: 'NotoYezidiWeb';
-            src: url('https://fonts.gstatic.com/s/notoserifyezidi/v3/4UaSrENM3L2R-3L4X-Q2E23mR8E3.woff2') format('woff2');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
+    <!-- 1. استدعاء خط الحروف الإيزيدية عبر Google Fonts الرسمي -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Yezidi:wght@400;700&display=swap" rel="stylesheet">
 
+    <style>
         /* 2. استدعاء ملف الأرقام الخاص بك المرفوع على GitHub */
         @font-face {
             font-family: 'YazidiNumFont';
@@ -28,7 +24,7 @@
         }
 
         body {
-            font-family: 'NotoYezidiWeb', 'YazidiNumFont', 'Segoe UI Historic', Tahoma, sans-serif;
+            font-family: 'Noto Serif Yezidi', 'Segoe UI Historic', Arial, sans-serif;
             background-color: #f4f6f9;
             margin: 0;
             padding: 20px 10px;
@@ -52,7 +48,7 @@
             margin-bottom: 5px;
             text-align: center;
             font-size: 26px;
-            font-family: 'NotoYezidiWeb', sans-serif !important;
+            font-family: 'Noto Serif Yezidi', sans-serif !important;
         }
 
         p.subtitle {
@@ -62,12 +58,12 @@
             font-size: 14px;
         }
 
-        /* إجبار مربع الكتابة على استخدام الخط الإيزيدي المضمن */
+        /* حقل الكتابة يقرأ خط الحروف الإيزيدية بشكل مباشر وصريح */
         textarea#editor {
             width: 100%;
             height: 200px;
             font-size: 28px;
-            font-family: 'NotoYezidiWeb', 'YazidiNumFont', sans-serif !important;
+            font-family: 'Noto Serif Yezidi', 'YazidiNumFont', sans-serif !important;
             padding: 15px;
             border: 2px solid #bdc3c7;
             border-radius: 8px;
@@ -160,7 +156,7 @@
         }
 
         .yezidi-letter-key {
-            font-family: 'NotoYezidiWeb', sans-serif !important;
+            font-family: 'Noto Serif Yezidi', sans-serif !important;
         }
 
         .key-btn:hover {
@@ -275,7 +271,6 @@
         backspaceBtn.onclick = () => deleteLastChar();
         lettersContainer.appendChild(backspaceBtn);
 
-        // تحويل الأحرف أثناء الكتابة
         editor.addEventListener('input', function() {
             let start = this.selectionStart;
             let text = this.value;
