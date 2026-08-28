@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة المفاتيح والأرقام الإيزيدية - Ezidi Keyboard</title>
+    <title>لوحة المفاتيح والأرقام الإيزيدية - Akademiya Ezidi</title>
 
     <style>
         @font-face {
@@ -32,6 +32,33 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           عنصر الترويسة المضاف
+           ========================= */
+        .brand-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .brand-icon {
+            font-size: 32px;
+            color: #d4af37; /* لون ذهبي مميز */
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .brand-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+            letter-spacing: 0.5px;
+            font-family: 'Segoe UI Historic', Tahoma, sans-serif;
         }
 
         .container {
@@ -261,6 +288,23 @@
             transform: scale(0.94);
         }
 
+        /* =========================
+           عنصر التذييل المضاف (Footer)
+           ========================= */
+        .footer-credits {
+            margin-top: 30px;
+            margin-bottom: 10px;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 13px;
+            font-family: 'Segoe UI Historic', Tahoma, sans-serif;
+            line-height: 1.5;
+        }
+
+        .footer-credits span {
+            display: block;
+        }
+
         /* الهاتف */
         @media (max-width: 600px) {
 
@@ -325,6 +369,12 @@
 </head>
 <body>
 
+    <!-- الشعار والاسم العلوي المضاف -->
+    <div class="brand-header">
+        <div class="brand-icon">✹</div>
+        <div class="brand-title">Akademiya Ezidi</div>
+    </div>
+
     <div class="container">
         <h1>لوحة المفاتيح الإيزيدية - 𐺩𐺏𐺨𐺋𐺊𐺀𐺢</h1>
         <p class="subtitle">انقر على الحروف والأرقام الظاهرة، أو اضغط مطولاً لإظهار الحروف الفرعية</p>
@@ -346,12 +396,18 @@
         <div class="keyboard-grid" id="lettersContainer"></div>
     </div>
 
+    <!-- الحقوق والأسماء السفلي المضاف -->
+    <div class="footer-credits">
+        <span>Ezzat Shingali</span>
+        <span>Shahwan Ezidxani</span>
+    </div>
+
     <script>
         const customNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
         /* الحروف بعد حذف (𐺓, 𐺔, 𐺅, 𐺖) */
         const yezidiAlphabet = [
-            '𐺀', '𐺁', '𐺂', '𐺃', '𐺄', '𐺆', '𐺇', '𐺈', '𐺉',
+            '𐺀', '𐺁', '𐺂', '𐺃', '𐺄', '', '𐺆', '𐺇', '𐺈', '𐺉',
             '𐺊', '𐺋', '𐺌', '𐺍', '𐺎', '𐺏', '𐺐', '𐺑', '𐺒', '𐺕',
             '𐺗', '𐺘', '𐺙', '𐺛', '𐺜', '𐺝', '𐺞', '𐺟', '𐺠', '𐺡',
             '𐺢', '𐺣', '𐺤', '𐺥', '𐺦', '𐺧', '𐺨', '𐺩', '𐺫', '𐺬',
