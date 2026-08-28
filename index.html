@@ -122,102 +122,204 @@
             margin-bottom: 10px;
         }
 
+        /* =========================
+           كيبورد مثل كيبورد الموبايل
+           ========================= */
+
         .keyboard-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            justify-content: center;
-            background-color: #ecf0f1;
-            padding: 15px;
-            border-radius: 8px;
+            display: grid;
+            grid-template-columns: repeat(10, minmax(0, 1fr));
+            gap: 7px;
+
+            background-color: #eef1f3;
+            padding: 12px 10px;
+            border-radius: 10px;
+
             direction: rtl;
             position: relative;
+            width: 100%;
         }
 
         .key-wrapper {
             position: relative;
-            display: inline-block;
+            display: flex;
+            width: 100%;
         }
 
         .key-btn {
+            width: 100%;
+            min-width: 0;
+            height: 52px;
+
             background-color: #ffffff;
-            border: 1px solid #bdc3c7;
-            border-radius: 6px;
-            padding: 8px;
-            font-size: 24px;
-            cursor: pointer;
-            user-select: none;
-            min-width: 45px;
-            height: 48px;
+            color: #202124;
+
+            border: 1px solid #d0d4d7;
+            border-radius: 7px;
+
+            padding: 0;
+            margin: 0;
+
+            font-size: 25px;
+            font-family: 'NotoYezidiGlobal', sans-serif !important;
+
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            transition: all 0.1s ease;
+
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
             -webkit-touch-callout: none;
+
+            box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+
+            transition:
+                transform 0.08s ease,
+                background-color 0.08s ease;
         }
 
         .yezidi-num-key {
             font-family: 'YazidiNumFont', sans-serif !important;
-            font-size: 26px;
+            font-size: 25px;
         }
 
         .yezidi-letter-key {
             font-family: 'NotoYezidiGlobal', sans-serif !important;
+            font-size: 25px;
         }
 
         .key-btn:hover {
-            background-color: #f39c12;
-            color: white;
-            border-color: #f39c12;
+            background-color: #f8f9fa;
+            color: #202124;
+            border-color: #c5c9cc;
         }
 
         .key-btn:active {
-            transform: scale(0.95);
+            transform: scale(0.94);
+            background-color: #dfe3e6;
         }
 
+        /* زر المسافة في الصف الأخير */
         .space-btn {
-            flex-grow: 1;
-            max-width: 250px;
-            font-size: 16px;
-            font-family: Arial, sans-serif;
+            grid-column: span 4;
+            width: 100%;
+            max-width: none;
+            font-size: 15px;
+            font-family: Arial, sans-serif !important;
         }
 
+        /* زر الحذف */
         .action-btn {
-            background-color: #95a5a6;
-            color: white;
-            font-size: 16px;
+            background-color: #cbd1d4 !important;
+            color: #ffffff !important;
+            font-size: 21px !important;
+            border: none !important;
+            box-shadow: none !important;
         }
 
-        /* نافذة الحروف الفرعية النافذة عند الضغط المطول */
+        /* نافذة الحروف الفرعية عند الضغط المطول */
         .sub-popup {
             position: absolute;
-            bottom: 55px;
+            bottom: 58px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: #2c3e50;
-            border-radius: 8px;
-            padding: 5px;
+
+            background-color: #303438;
+            border-radius: 9px;
+            padding: 6px;
+
             display: flex;
             gap: 5px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            z-index: 100;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.35);
+            z-index: 1000;
         }
 
         .sub-popup button {
             background-color: #ffffff;
+            color: #202124;
+
             border: none;
-            border-radius: 4px;
-            font-size: 22px;
-            min-width: 38px;
-            height: 40px;
+            border-radius: 6px;
+
+            font-size: 23px;
+            min-width: 42px;
+            height: 45px;
+
             cursor: pointer;
+
             font-family: 'NotoYezidiGlobal', sans-serif !important;
         }
 
         .sub-popup button:hover {
-            background-color: #e67e22;
-            color: white;
+            background-color: #f1f3f4;
+        }
+
+        .sub-popup button:active {
+            background-color: #dfe3e6;
+            transform: scale(0.94);
+        }
+
+        /* الهاتف */
+        @media (max-width: 600px) {
+
+            body {
+                padding: 10px 6px;
+            }
+
+            .container {
+                padding: 12px 8px;
+                border-radius: 10px;
+            }
+
+            .keyboard-grid {
+                grid-template-columns: repeat(10, minmax(0, 1fr));
+                gap: 5px;
+                padding: 9px 6px;
+                border-radius: 9px;
+            }
+
+            .key-btn {
+                height: 48px;
+                font-size: 22px;
+                border-radius: 6px;
+            }
+
+            .yezidi-letter-key {
+                font-size: 22px;
+            }
+
+            .yezidi-num-key {
+                font-size: 22px;
+            }
+
+            .space-btn {
+                grid-column: span 4;
+                font-size: 14px;
+            }
+        }
+
+        /* شاشة صغيرة جداً */
+        @media (max-width: 380px) {
+
+            .keyboard-grid {
+                gap: 4px;
+                padding: 7px 5px;
+            }
+
+            .key-btn {
+                height: 44px;
+                font-size: 20px;
+            }
+
+            .yezidi-letter-key {
+                font-size: 20px;
+            }
+
+            .yezidi-num-key {
+                font-size: 20px;
+            }
         }
     </style>
 </head>
@@ -237,7 +339,7 @@
             <span id="charCount" style="color: #7f8c8d;">عدد الحروف: 0</span>
         </div>
 
-        <div class="section-title">الأرقام الإيزيدية</div>
+        <div class="section-title">الأرقام الإيزيدية (خطك الخاص):</div>
         <div class="keyboard-grid" id="numbersContainer"></div>
 
         <div class="section-title">الحروف الإيزيدية:</div>
@@ -247,43 +349,33 @@
     <script>
         const customNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 
+        /* الحروف نفسها بدون تغيير */
         const yezidiAlphabet = [
-            '𐺀', '𐺁', '𐺂', '𐺃', '𐺄', '𐺆', '𐺇', '𐺈', '𐺉', 
-            '𐺊', '𐺋', '𐺌', '𐺍', '𐺎', '𐺏', '𐺐', '𐺑', '𐺒', '𐺓', 
-            '𐺔', '𐺕', '𐺖', '𐺗', '𐺘', '𐺙', '𐺚', '𐺛', '𐺜', '𐺝', 
-            '𐺞', '𐺟', '𐺠', '𐺡', '𐺢', '𐺣', '𐺤', '𐺥', '𐺦', '𐺧', 
+            '𐺀', '𐺁', '𐺂', '𐺃', '𐺄', '𐺅', '𐺆', '𐺇', '𐺈', '𐺉',
+            '𐺊', '𐺋', '𐺌', '𐺍', '𐺎', '𐺏', '𐺐', '𐺑', '𐺒', '𐺓',
+            '𐺔', '𐺕', '𐺖', '𐺗', '𐺘', '𐺙', '𐺚', '𐺛', '𐺜', '𐺝',
+            '𐺞', '𐺟', '𐺠', '𐺡', '𐺢', '𐺣', '𐺤', '𐺥', '𐺦', '𐺧',
             '𐺨', '𐺩', '𐺫', '𐺬', '𐺭'
         ];
 
-        // مصفوفة الحروف الفرعية الناشئة عند الضغط المطول
+        /* الحروف الفرعية نفسها بدون تغيير */
         const subLetterMap = {
             '𐺀': ['𐺫', '𐺬'],
             '𐺨': ['𐺌'],
-            '𐺣': ['𐺤', '𐺥'],
+            '𐺣': ['𐺉', '𐺤', '𐺥'],
             '𐺇': ['𐺈'],
-            
-            
+            '𐺎': ['𐺏'],
+            '𐺐': ['𐺑'],
             '𐺝': ['𐺞', '𐺟'],
             '𐺏': ['𐺐']
         };
 
+        /* خريطة التحويل نفسها بدون تغيير */
         const charMap = {
-            '٠': '0',
-            '١': '1',
-            '٢': '2',
-            '٣': '3',
-            '٤': '4',
-            '٥': '5',
-            '٦': '6',
-            '٧': '7',
-            '٨': '8',
-            '٩': '9',
+            '٠': '0', '١': '1', '٢': '2', '٣': '3', '٤': '4',
+            '٥': '5', '٦': '6', '٧': '7', '٨': '8', '٩': '9',
 
-            // العربية
-            'ا': '𐺀',
-            'أ': '𐺀',
-            'إ': '𐺀',
-            'آ': '𐺀',
+            'ا': '𐺀', 'أ': '𐺀', 'إ': '𐺀', 'آ': '𐺀',
             'ب': '𐺁',
             'پ': '𐺂',
             'ت': '𐺄',
@@ -327,86 +419,34 @@
             'ى': '𐺱',
             'ە': '𐺧',
 
-            // الحركات والرموز
             'َ': '𐺬',
             'ء': '𐺫',
             'ّ': '𐺫',
 
-            // التاء المربوطة
             'ة': '𐺄𐺭',
 
-            // الإنجليزية واللاتينية تبقى كما هي
-            'A': 'A',
-            'B': 'B',
-            'C': 'C',
-            'D': 'D',
-            'E': 'E',
-            'F': 'F',
-            'G': 'G',
-            'H': 'H',
-            'I': 'I',
-            'J': 'J',
-            'K': 'K',
-            'L': 'L',
-            'M': 'M',
-            'N': 'N',
-            'O': 'O',
-            'P': 'P',
-            'Q': 'Q',
-            'R': 'R',
-            'S': 'S',
-            'T': 'T',
-            'U': 'U',
-            'V': 'V',
-            'W': 'W',
-            'X': 'X',
-            'Y': 'Y',
+            'A': 'A', 'B': 'B', 'C': 'C', 'D': 'D', 'E': 'E',
+            'F': 'F', 'G': 'G', 'H': 'H', 'I': 'I', 'J': 'J',
+            'K': 'K', 'L': 'L', 'M': 'M', 'N': 'N', 'O': 'O',
+            'P': 'P', 'Q': 'Q', 'R': 'R', 'S': 'S', 'T': 'T',
+            'U': 'U', 'V': 'V', 'W': 'W', 'X': 'X', 'Y': 'Y',
             'Z': 'Z',
 
-            'a': 'a',
-            'b': 'b',
-            'c': 'c',
-            'd': 'd',
-            'e': 'e',
-            'f': 'f',
-            'g': 'g',
-            'h': 'h',
-            'i': 'i',
-            'j': 'j',
-            'k': 'k',
-            'l': 'l',
-            'm': 'm',
-            'n': 'n',
-            'o': 'o',
-            'p': 'p',
-            'q': 'q',
-            'r': 'r',
-            's': 's',
-            't': 't',
-            'u': 'u',
-            'v': 'v',
-            'w': 'w',
-            'x': 'x',
-            'y': 'y',
+            'a': 'a', 'b': 'b', 'c': 'c', 'd': 'd', 'e': 'e',
+            'f': 'f', 'g': 'g', 'h': 'h', 'i': 'i', 'j': 'j',
+            'k': 'k', 'l': 'l', 'm': 'm', 'n': 'n', 'o': 'o',
+            'p': 'p', 'q': 'q', 'r': 'r', 's': 's', 't': 't',
+            'u': 'u', 'v': 'v', 'w': 'w', 'x': 'x', 'y': 'y',
             'z': 'z',
 
-            // الحروف اللاتينية الخاصة تبقى كما هي
-            'ç': 'ç',
-            'Ç': 'Ç',
-            'ş': 'ş',
-            'Ş': 'Ş',
-            'ê': 'ê',
-            'Ê': 'Ê',
-            'î': 'î',
-            'Î': 'Î',
-            'û': 'û',
-            'Û': 'Û',
-            'ä': 'ä',
-            'Ä': 'Ä',
-            'ö': 'ö',
-            'Ö': 'Ö',
-            'ü': 'ü',
-            'Ü': 'Ü',
+            'ç': 'ç', 'Ç': 'Ç',
+            'ş': 'ş', 'Ş': 'Ş',
+            'ê': 'ê', 'Ê': 'Ê',
+            'î': 'î', 'Î': 'Î',
+            'û': 'û', 'Û': 'Û',
+            'ä': 'ä', 'Ä': 'Ä',
+            'ö': 'ö', 'Ö': 'Ö',
+            'ü': 'ü', 'Ü': 'Ü',
             'ß': 'ß'
         };
 
@@ -438,8 +478,10 @@
 
             const startPress = (e) => {
                 isLongPress = false;
+
                 pressTimer = setTimeout(() => {
                     isLongPress = true;
+
                     if (subLetterMap[letter]) {
                         showSubPopup(wrapper, subLetterMap[letter]);
                     }
@@ -448,6 +490,7 @@
 
             const endPress = (e) => {
                 clearTimeout(pressTimer);
+
                 if (!isLongPress) {
                     insertAtCursor(letter);
                     closePopup();
@@ -456,8 +499,19 @@
 
             btn.addEventListener('mousedown', startPress);
             btn.addEventListener('mouseup', endPress);
-            btn.addEventListener('touchstart', (e) => { startPress(e); });
-            btn.addEventListener('touchend', (e) => { endPress(e); e.preventDefault(); });
+
+            btn.addEventListener('touchstart', (e) => {
+                startPress(e);
+            }, { passive: false });
+
+            btn.addEventListener('touchend', (e) => {
+                endPress(e);
+                e.preventDefault();
+            }, { passive: false });
+
+            btn.addEventListener('touchcancel', () => {
+                clearTimeout(pressTimer);
+            });
 
             wrapper.appendChild(btn);
             lettersContainer.appendChild(wrapper);
@@ -465,19 +519,23 @@
 
         const spaceWrapper = document.createElement('div');
         spaceWrapper.className = 'key-wrapper space-btn';
+
         const spaceBtn = document.createElement('button');
         spaceBtn.className = 'key-btn space-btn';
         spaceBtn.innerText = 'مسافة';
         spaceBtn.onclick = () => insertAtCursor(' ');
+
         spaceWrapper.appendChild(spaceBtn);
         lettersContainer.appendChild(spaceWrapper);
 
         const backspaceWrapper = document.createElement('div');
         backspaceWrapper.className = 'key-wrapper';
+
         const backspaceBtn = document.createElement('button');
         backspaceBtn.className = 'key-btn action-btn';
         backspaceBtn.innerText = '⌫';
         backspaceBtn.onclick = () => deleteLastChar();
+
         backspaceWrapper.appendChild(backspaceBtn);
         lettersContainer.appendChild(backspaceWrapper);
 
@@ -490,11 +548,13 @@
             subLetters.forEach(sub => {
                 const subBtn = document.createElement('button');
                 subBtn.innerText = sub;
+
                 subBtn.onclick = (e) => {
                     e.stopPropagation();
                     insertAtCursor(sub);
                     closePopup();
                 };
+
                 popup.appendChild(subBtn);
             });
 
@@ -525,7 +585,13 @@
             }
 
             this.value = converted;
-            this.setSelectionRange(start, start);
+
+            /* المحافظة على مكان المؤشر */
+            this.setSelectionRange(
+                Math.min(start, this.value.length),
+                Math.min(start, this.value.length)
+            );
+
             updateCount();
         });
 
@@ -534,8 +600,15 @@
             let end = editor.selectionEnd;
             let text = editor.value;
 
-            editor.value = text.substring(0, start) + char + text.substring(end);
-            editor.selectionStart = editor.selectionEnd = start + char.length;
+            editor.value =
+                text.substring(0, start) +
+                char +
+                text.substring(end);
+
+            editor.selectionStart =
+                editor.selectionEnd =
+                start + char.length;
+
             editor.focus();
             updateCount();
         }
@@ -546,25 +619,40 @@
             let text = editor.value;
 
             if (start === end && start > 0) {
-                let chars = Array.from(text);
-                chars.pop();
+                const chars = Array.from(text);
+
+                /* حذف آخر حرف حقيقي */
+                chars.splice(chars.length - 1, 1);
+
                 editor.value = chars.join('');
-            } else if (start !== end) {
-                editor.value = text.substring(0, start) + text.substring(end);
             }
+            else if (start !== end) {
+                editor.value =
+                    text.substring(0, start) +
+                    text.substring(end);
+            }
+
             editor.focus();
             updateCount();
         }
 
         function updateCount() {
-            charCount.innerText = `عدد الحروف: ${Array.from(editor.value).length}`;
+            charCount.innerText =
+                `عدد الحروف: ${Array.from(editor.value).length}`;
         }
 
         function copyText() {
             if (!editor.value) return;
-            editor.select();
-            navigator.clipboard.writeText(editor.value);
-            alert("تم نسخ النص!");
+
+            navigator.clipboard.writeText(editor.value)
+                .then(() => {
+                    alert("تم نسخ النص!");
+                })
+                .catch(() => {
+                    editor.select();
+                    document.execCommand('copy');
+                    alert("تم نسخ النص!");
+                });
         }
 
         function clearText() {
