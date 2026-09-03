@@ -414,14 +414,12 @@
             '𐺭'
         ];
 
-        /* الحروف الفرعية نفسها بدون تغيير */
+        /* خريطة الحروف الفرعية عند الضغط المطول */
         const subLetterMap = {
             '𐺀': ['𐺫', '𐺬'],
             '𐺨': ['𐺌'],
-            
             '𐺇': ['𐺈'],
             '𐺂': ['𐺃'],
-            
             '𐺝': ['𐺞', '𐺟'],
             '𐺏': ['𐺐']
         };
@@ -448,7 +446,6 @@
             'ژ': '𐺐',
             'س': '𐺑',
             'ش': '𐺒',
-            
             
             'ط': '𐺕',
             
@@ -550,7 +547,7 @@
                     if (subLetterMap[letter]) {
                         showSubPopup(wrapper, subLetterMap[letter]);
                     }
-                }, 450);
+                }, 400);
             };
 
             const endPress = (e) => {
@@ -616,6 +613,13 @@
 
                 subBtn.onclick = (e) => {
                     e.stopPropagation();
+                    insertAtCursor(sub);
+                    closePopup();
+                };
+
+                subBtn.ontouchend = (e) => {
+                    e.stopPropagation();
+                    e.preventDefault();
                     insertAtCursor(sub);
                     closePopup();
                 };
